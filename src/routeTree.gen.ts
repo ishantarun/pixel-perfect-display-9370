@@ -10,13 +10,22 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as DashboardRouteImport } from './routes/dashboard'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as RegisterRouteImport } from './routes/register'
 import { Route as WelcomeRouteImport } from './routes/welcome'
+import { Route as EmergencyIndexRouteImport } from './routes/emergency.index'
+import { Route as EmergencyRequestRouteImport } from './routes/emergency.request'
+import { Route as EmergencyTypeRouteImport } from './routes/emergency.type'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DashboardRoute = DashboardRouteImport.update({
+  id: '/dashboard',
+  path: '/dashboard',
   getParentRoute: () => rootRouteImport,
 } as any)
 const LoginRoute = LoginRouteImport.update({
@@ -34,39 +43,95 @@ const WelcomeRoute = WelcomeRouteImport.update({
   path: '/welcome',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EmergencyIndexRoute = EmergencyIndexRouteImport.update({
+  id: '/emergency/',
+  path: '/emergency/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmergencyRequestRoute = EmergencyRequestRouteImport.update({
+  id: '/emergency/request',
+  path: '/emergency/request',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EmergencyTypeRoute = EmergencyTypeRouteImport.update({
+  id: '/emergency/type',
+  path: '/emergency/type',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/welcome': typeof WelcomeRoute
+  '/emergency/request': typeof EmergencyRequestRoute
+  '/emergency/type': typeof EmergencyTypeRoute
+  '/emergency/': typeof EmergencyIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/welcome': typeof WelcomeRoute
+  '/emergency/request': typeof EmergencyRequestRoute
+  '/emergency/type': typeof EmergencyTypeRoute
+  '/emergency': typeof EmergencyIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/dashboard': typeof DashboardRoute
   '/login': typeof LoginRoute
   '/register': typeof RegisterRoute
   '/welcome': typeof WelcomeRoute
+  '/emergency/request': typeof EmergencyRequestRoute
+  '/emergency/type': typeof EmergencyTypeRoute
+  '/emergency/': typeof EmergencyIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/login' | '/register' | '/welcome'
+  fullPaths:
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/register'
+    | '/welcome'
+    | '/emergency/request'
+    | '/emergency/type'
+    | '/emergency/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/login' | '/register' | '/welcome'
-  id: '__root__' | '/' | '/login' | '/register' | '/welcome'
+  to:
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/register'
+    | '/welcome'
+    | '/emergency/request'
+    | '/emergency/type'
+    | '/emergency'
+  id:
+    | '__root__'
+    | '/'
+    | '/dashboard'
+    | '/login'
+    | '/register'
+    | '/welcome'
+    | '/emergency/request'
+    | '/emergency/type'
+    | '/emergency/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  DashboardRoute: typeof DashboardRoute
   LoginRoute: typeof LoginRoute
   RegisterRoute: typeof RegisterRoute
   WelcomeRoute: typeof WelcomeRoute
+  EmergencyRequestRoute: typeof EmergencyRequestRoute
+  EmergencyTypeRoute: typeof EmergencyTypeRoute
+  EmergencyIndexRoute: typeof EmergencyIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -76,6 +141,13 @@ declare module '@tanstack/react-router' {
       path: '/'
       fullPath: '/'
       preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dashboard': {
+      id: '/dashboard'
+      path: '/dashboard'
+      fullPath: '/dashboard'
+      preLoaderRoute: typeof DashboardRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -99,14 +171,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WelcomeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/emergency/': {
+      id: '/emergency/'
+      path: '/emergency'
+      fullPath: '/emergency/'
+      preLoaderRoute: typeof EmergencyIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/emergency/request': {
+      id: '/emergency/request'
+      path: '/emergency/request'
+      fullPath: '/emergency/request'
+      preLoaderRoute: typeof EmergencyRequestRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/emergency/type': {
+      id: '/emergency/type'
+      path: '/emergency/type'
+      fullPath: '/emergency/type'
+      preLoaderRoute: typeof EmergencyTypeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  DashboardRoute: DashboardRoute,
   LoginRoute: LoginRoute,
   RegisterRoute: RegisterRoute,
   WelcomeRoute: WelcomeRoute,
+  EmergencyRequestRoute: EmergencyRequestRoute,
+  EmergencyTypeRoute: EmergencyTypeRoute,
+  EmergencyIndexRoute: EmergencyIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
