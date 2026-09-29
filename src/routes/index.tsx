@@ -1,24 +1,46 @@
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useEffect, useState } from "react";
+import { Heart } from "lucide-react";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
-  component: Index,
+  head: () => ({
+    meta: [
+      { title: "LifeRoute — Faster Care. Safer Lives." },
+      { name: "description", content: "Emergency healthcare coordination for patients, ambulances and hospitals." },
+      { property: "og:title", content: "LifeRoute — Faster Care. Safer Lives." },
+      { property: "og:description", content: "Request an ambulance, track it live, and reach the right hospital faster." },
+    ],
+  }),
+  component: Splash,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
-function Index() {
+function Splash() {
+  const navigate = useNavigate();
+  const [leaving, setLeaving] = useState(false);
+
+  useEffect(() => {
+    const fade = setTimeout(() => setLeaving(true), 1700);
+    const go = setTimeout(() => navigate({ to: "/dashboard" }), 2000);
+    return () => {
+      clearTimeout(fade);
+      clearTimeout(go);
+    };
+  }, [navigate]);
+
   return (
     <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
+      className={`grid min-h-screen place-items-center bg-sidebar px-6 transition-all duration-300 ${leaving ? "scale-105 opacity-0" : "opacity-100"}`}
     >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
+      <div className="animate-rise flex flex-col items-center text-center">
+        <span className="relative grid h-24 w-24 place-items-center rounded-full bg-emergency text-emergency-foreground pulse-ring">
+          <Heart className="animate-heartbeat h-12 w-12" aria-hidden />
+        </span>
+        <h1 className="mt-8 font-display text-5xl font-extrabold text-sidebar-foreground">LifeRoute</h1>
+        <p className="mt-3 text-lg text-sidebar-foreground/70">Faster Care. Safer Lives.</p>
+        <div className="mt-10 h-1 w-40 overflow-hidden rounded-full bg-sidebar-accent">
+          <div className="skeleton-shimmer h-full w-full" />
+        </div>
+      </div>
     </div>
   );
 }
